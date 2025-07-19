@@ -1,3 +1,5 @@
+#Terraform Variables
+
 variable "subscription_id" {
   description = "The Azure subscription ID"
   default     = "your-subscription-id"
@@ -12,7 +14,7 @@ variable "env" {
   default     = "dev"
 }
 variable "region" {
-  description = "The AWS region to deploy the infrastructure"
+  description = "The Azure region to deploy the infrastructure"
   default     = "us-east-1"
 }
 variable "resource_group_name" {
