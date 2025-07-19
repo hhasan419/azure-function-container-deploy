@@ -1,14 +1,5 @@
 # Terraform Variables
 
-variable "subscription_id" {
-  description = "The Azure subscription ID"
-  default     = "your-subscription-id"
-}
-variable "tenant_id" {
-  description = "The Azure tenant ID"
-  default     = "your-tenant-id"
-}
-
 variable "env" {
   description = "The environment for the deployment"
   default     = "dev"
