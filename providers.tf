@@ -1,4 +1,4 @@
-# specify the provide version
+  # specify the provide version
 terraform {
   required_providers {
     azurerm = {
@@ -13,7 +13,7 @@ provider "azurerm" {
     features {}
 
     client_id = var.tenent_id
-    client_folder = var.subscription_id
+    client_secret = var.subscription_id
     subscription_id =  var.client_id
     tenant_id = var.client_secret
 }
