@@ -3,6 +3,31 @@ resource "azurerm_resource_group" "rg" {
   name     = var.resource_group_name
   location = var.location
 }
+
+# Create Virtual Network
+resource "azurerm_virtual_network" "vnet" {
+  name                = "${var.resource_group_name}-vnet"
+  address_space       = ["10.0.0.0/16"]
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = "${var.env}-${azurerm_resource_group.rg.name}"
+}
+
+# Create Public Subnet
+resource "azurerm_subnet" "public" {
+  name                 = "public-subnet"
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  address_prefixes     = ["10.0.1.0/24"]
+}
+
+# Create Private Subnet
+resource "azurerm_subnet" "private" {
+  name                 = "private-subnet"
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  address_prefixes     = ["10.0.2.0/24"]
+}
+
 resource "azurerm_app_service_plan" "service_plan" {
   name                = var.app_service_plan_name
   location            = azurerm_resource_group.rg.location
@@ -14,21 +39,22 @@ resource "azurerm_app_service_plan" "service_plan" {
 }
 
 # create storage account for the function app
-resource "azurerm_storage_account" "dev" {  
+resource "azurerm_storage_account" "app_storage" {  
     name                     = var.app_storage_name
-    resource_group_name      = azurerm_resource_group.dev.name
-    location                 = azurerm_resource_group.dev.location
+    resource_group_name      = azurerm_resource_group.rg.name
+    location                 = azurerm_resource_group.rg.location
     account_tier             = "Standard"
-    account_replication_type = "LRS"
+    account_replication_type = "GRS"
+    min_tls_version          = "TLS1_2"
     }
 
-resource "azurerm_function_app" "dev" {
+resource "azurerm_function_app" "function_app" {
   name                       = var.app_service_name
-  location                   = azurerm_resource_group.dev.location
-  resource_group_name        = azurerm_resource_group.dev.name
-  app_service_plan_id        = azurerm_app_service_plan.dev.id
-  storage_account_name       = azurerm_storage_account.dev.name
-  storage_account_access_key = azurerm_storage_account.dev.primary_access_key
+  location                   = azurerm_resource_group.rg.location
+  resource_group_name        = azurerm_resource_group.rg.name
+  app_service_plan_id        = azurerm_app_service_plan.service_plan.id
+  storage_account_name       = azurerm_storage_account.app_storage.name
+  storage_account_access_key = azurerm_storage_account.app_storage.primary_access_key
 
   app_settings = {
     FUNCTIONS_WORKER_RUNTIME = "node"
@@ -36,10 +62,16 @@ resource "azurerm_function_app" "dev" {
   }
 }
 
-output "app_service_plan_id" {
-  value = azurerm_app_service_plan.dev.id
+
+resource "azurerm_dns_zone" "dns_zone" {
+  name                = var.dns_zone_name
+  resource_group_name = azurerm_resource_group.rg.name
 }
 
-output "function_app_name" {
-  value = azurerm_function_app.dev.name
+resource "azurerm_dns_a_record" "dns_record" {
+  name                = var.function_app_dns_name
+  zone_name           = azurerm_dns_zone.dns_zone.name
+  resource_group_name = azurerm_resource_group.rg.name
+  ttl                 = 300
+  records             = [azurerm_function_app.function_app.default_hostname]
 }
