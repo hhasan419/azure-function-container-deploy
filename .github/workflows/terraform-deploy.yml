@@ -1,26 +1,36 @@
-name: Terraform Deploy to Azure
-
+# build terraform infrastructure
+name: Build and Deploy Terraform Infrastructure
 on:
-push:
-  branches:
-    -main
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+
 jobs:
-  deploy:
-     runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
 
-Steps:
- -name: checkout code
-  uses: actions /checkout@v3
-  
-- name: Setup Terraform
-  uses: hashicorp/setup-terraform@v3
-  with:
-    terraform_version: 1.6.6
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-- name: Terraform Init
-  run: terraform init
-  env:
-    ARM_CLIENT_ID = lqg8Q~7I~HW42Z63J4wf8jT.UTM~iJC-32QJPdkZ
-    ARM_CLIENT_SECRET = 0b889ca3-c111-47fc-b0ed-88a37593b8fa
-    ARM_SUBSCRIPTION_ID =  90de0c98-2d25-4094-a834-32b29fdf8003
-    ARM_TENANT_ID = 0b889ca3-c111-47fc-b0ed-88a37593b8fa
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.0.0
+
+      - name: Terraform Init
+        run: terraform  init
+
+      - name: Terraform Plan
+        run: terraform plan 
+
+      - name: Terraform Apply
+        if:  
+        run: terraform apply -auto-approve 
+
+      - name: Output Terraform State
+        run: terraform output -json
