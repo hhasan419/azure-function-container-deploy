@@ -1,22 +1,9 @@
-name: Deploy Azure infra with Terraform
-
-on:
- push:
-  branches:
-     -main
-
 jobs:
-  terraform:
+  deploy:
      runs-on: ubuntu-latest
 
-env:
-ARM_CLIENT_ID = lqg8Q~7I~HW42Z63J4wf8jT.UTM~iJC-32QJPdkZ
-ARM_CLIENT_SECRET = 0b889ca3-c111-47fc-b0ed-88a37593b8fa
-ARM_SUBSCRIPTION_ID =  90de0c98-2d25-4094-a834-32b29fdf8003
-ARM_TENANT_ID = 0b889ca3-c111-47fc-b0ed-88a37593b8fa
-
 Steps:
- -name: checkout repo
+ -name: checkout code
   uses: actions/checkout@3
   
 - name: Setup Terraform
@@ -26,14 +13,8 @@ Steps:
 
 - name: Terraform Init
   run: terraform init
-
--name: Terraform Validate
- run: Terraform Validate 
-
--name: Terraform Plan
- run: terraform Plan
-
--name: Terrafrom Apply
- run: terraform apply -auto-approve
-
-    
+  env:
+    ARM_CLIENT_ID = lqg8Q~7I~HW42Z63J4wf8jT.UTM~iJC-32QJPdkZ
+    ARM_CLIENT_SECRET = 0b889ca3-c111-47fc-b0ed-88a37593b8fa
+    ARM_SUBSCRIPTION_ID =  90de0c98-2d25-4094-a834-32b29fdf8003
+    ARM_TENANT_ID = 0b889ca3-c111-47fc-b0ed-88a37593b8fa
