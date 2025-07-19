@@ -1,5 +1,6 @@
 # Terraform Variables
 
+
 variable "env" {
   description = "The environment for the deployment"
   default     = "dev"
@@ -11,7 +12,7 @@ variable "region" {
 
 variable "vnet_name" {
   description = "The name of the virtual network"
-  default     = "${}-vnet"
+  default     = "vnet"
 }
 
 variable "address_prefixes" {
@@ -30,7 +31,7 @@ variable "private_subnet_prefix" {
 
 variable "resource_group_name" {
   description = "The name of the resource group"
-  default     = "${}_ResourceGroup"
+  default     = "ResourceGroup"
 }
 variable "location" {
   description = "The location of the resource group"
@@ -38,36 +39,36 @@ variable "location" {
 }
 variable "app_service_name" {
   description = "The name of the app service"
-  default     = "${}AppService"
+  default     = "appointment-service"
 }
 
 variable "app_service_plan_name" {
   description = "The name of the app service plan"
-  default     = "${}-app-service-plan"
+  default     = "appointment-service-plan"
   
 }
 
 variable "function_app_name" {
   description = "The name of the function app"
-  default     = "${}-appointment-service-FunctionApp"
+  default     = "appointment-service-FunctionApp"
 }
 
 variable "app_storage_name" {
   description = "The name of the storage account"
-  default     = "${}StorageAccount"
+  default     = "appointment-service-StorageAccount"
 }
 
 variable "dns_name" {
   description = "The DNS name for the function app"
-  default     = "${}-function-app"
+  default     = "appointment-service-function-app"
 }
 
 variable "dns_zone_name" {
   description = "The DNS zone name"
-  default     = "${}.${app_service_name}.com"
+  default     = "appointment-service.com"
 }
 
 variable "function_app_dns_name" {
   description = "The DNS name for the function app"
-  default     = "${}-function-app.${dns_zone_name}"
+  default     = "appointment-service-function-app"
 }
