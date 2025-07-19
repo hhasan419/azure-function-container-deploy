@@ -11,7 +11,7 @@ variable "region" {
 
 variable "vnet_name" {
   description = "The name of the virtual network"
-  default     = "${env}-vnet"
+  default     = "${}-vnet"
 }
 
 variable "address_prefixes" {
@@ -30,7 +30,7 @@ variable "private_subnet_prefix" {
 
 variable "resource_group_name" {
   description = "The name of the resource group"
-  default     = "${env}_ResourceGroup"
+  default     = "${}_ResourceGroup"
 }
 variable "location" {
   description = "The location of the resource group"
@@ -38,36 +38,36 @@ variable "location" {
 }
 variable "app_service_name" {
   description = "The name of the app service"
-  default     = "${env}AppService"
+  default     = "${}AppService"
 }
 
 variable "app_service_plan_name" {
   description = "The name of the app service plan"
-  default     = "${env}-app-service-plan"
+  default     = "${}-app-service-plan"
   
 }
 
 variable "function_app_name" {
   description = "The name of the function app"
-  default     = "${env}-appointment-service-FunctionApp"
+  default     = "${}-appointment-service-FunctionApp"
 }
 
 variable "app_storage_name" {
   description = "The name of the storage account"
-  default     = "${env}StorageAccount"
+  default     = "${}StorageAccount"
 }
 
 variable "dns_name" {
   description = "The DNS name for the function app"
-  default     = "${env}-function-app"
+  default     = "${}-function-app"
 }
 
 variable "dns_zone_name" {
   description = "The DNS zone name"
-  default     = "${env}.${app_service_name}.com"
+  default     = "${}.${app_service_name}.com"
 }
 
 variable "function_app_dns_name" {
   description = "The DNS name for the function app"
-  default     = "${env}-function-app.${dns_zone_name}"
+  default     = "${}-function-app.${dns_zone_name}"
 }
